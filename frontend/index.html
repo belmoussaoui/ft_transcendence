@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>hello world</h1>
+    <span id="resultat"></span>
+    <script>
+        const apiUrl = 'http://localhost:8080/api/articles';
+
+        fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Erreur HTTP! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('resultat').innerText = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                console.error('Erreur lors de la requête à l\'API:', error);
+            });
+    </script>
+</body>
+</html>

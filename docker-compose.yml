@@ -6,8 +6,12 @@ services:
     restart: always
     ports:
       - "4000:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
   backend:
     build: ./backend
     restart: always
     ports:
       - "8080:8080"
+    volumes:
+      - ./backend:/app

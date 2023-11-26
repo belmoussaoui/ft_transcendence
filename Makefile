@@ -14,4 +14,4 @@ fclean:
 
 re: down build
 
-.PHONY: all fclean re
+.PHONY: all up build down fclean re

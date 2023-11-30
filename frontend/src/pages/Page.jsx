@@ -2,11 +2,11 @@ import "./Page.css"
 import Home from './home/Home';
 import Navbar from '../components/navbar/Navbar';
 
-function Page() {
+function Page({children}) {
     return (
         <main className="page">
             <Navbar></Navbar>
-            <Home></Home>
+            { children }
         </main>
     )
 }

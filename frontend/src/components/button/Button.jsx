@@ -1,9 +1,9 @@
 import "./Button.css"
 
-const Button = ({ title, ...props }) => {
+const Button = ({ children, ...props }) => {
   return (
     <button variant={'primary'} {...props} className="button-main">
-      {title}
+      {children}
     </button>
   );
 };

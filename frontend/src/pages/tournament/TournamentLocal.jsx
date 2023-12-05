@@ -13,15 +13,12 @@ function TournamentLocal() {
   };
 
   const handleStartTournament = () => {
-    // Logique pour démarrer le tournoi avec le nombre de joueurs et les noms des joueurs
     console.log('Démarrer le tournoi avec', numberOfPlayers, 'joueurs', playerNames);
   };
 
   return (
-    <div className="container-fluid">
-      <div className="row">
-        <Block title="Local Tournament Setup">
-          <div className="text-center">
+    <Block title="Local Tournament Setup">
+        <div className="text-center">
             <label>Number of Players:
               <input
                 type="number"
@@ -43,9 +40,6 @@ function TournamentLocal() {
             <Button onClick={handleStartTournament}>Start Tournament</Button>
           </div>
         </Block>
-        {/* Ajouter d'autres composants ou sections si nécessaire */}
-      </div>
-    </div>
   );
 }
 

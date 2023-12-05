@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 import Block from "../../components/block/Block";
 
 function TournamentList() {
@@ -22,19 +21,15 @@ function TournamentList() {
   }, []);
 
   return (
-		<div className="container-fluid">
-        	<div className="row">
-                <Block title="Tournament List">
-                    <div className="text-center">
-    					<ul>
-        					{tournaments.map(tournament => (
-          					<li key={tournament.id}>{tournament.name}</li>
-        					))}
-      					</ul>
-    				</div>
-				</Block>
-			</div>
-		</div>
+    <Block title="Tournament List">
+        <div className="text-center">
+        	<ul style={{ maxHeight: '175px', overflowY: 'auto' }}>
+            	{tournaments.map(tournament => (
+            		<li key={tournament.id}>{tournament.name}</li>
+            	))}
+        	</ul>
+        </div>
+    </Block>
   );
 }
 

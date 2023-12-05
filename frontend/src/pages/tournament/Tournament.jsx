@@ -29,24 +29,20 @@ function Tournament() {
     };
 
     return (
-        <div className="container-fluid">
-            <div className="row">
-                <Block title="Create Tournament Lobby">
-                    <div className="text-center">
-                        <input
-                            type="text"
-                            placeholder="Nom du lobby"
-                            value={lobbyName}
-                            onChange={(e) => setLobbyName(e.target.value)}
-                        />
-                        <Button onClick={handleCreateLobby}>Créer le lobby</Button>
-                        {createdLobby && (
-                            <p className="mt-3">Lobby créé : {createdLobby.name}</p>
-                        )}
-                    </div>
-                </Block>
+        <Block title="Create Tournament Lobby">
+            <div className="text-center">
+                <input
+                    type="text"
+                    placeholder="Nom du lobby"
+                    value={lobbyName}
+                    onChange={(e) => setLobbyName(e.target.value)}
+                />
+                <Button onClick={handleCreateLobby}>Créer le lobby</Button>
+                {createdLobby && (
+                    <p className="mt-3">Lobby créé : {createdLobby.name}</p>
+                )}
             </div>
-        </div>
+        </Block>
     )
 }
 

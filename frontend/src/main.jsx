@@ -1,11 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
 import { createBrowserRouter, RouterProvider,} from "react-router-dom";
 import Sidebar from './components/navbar/Sidebar.jsx';
 import Page from './pages/Page.jsx';
 import Home from './pages/home/Home.jsx';
 import Play from './pages/play/Play.jsx';
+import "./main.css"
 
 const router = createBrowserRouter([
   {

@@ -6,7 +6,7 @@ import Sidebar from './components/navbar/Sidebar.jsx';
 import Page from './pages/Page.jsx';
 import Home from './pages/home/Home.jsx';
 import Play from './pages/play/Play.jsx';
-import Tournament from './pages/tournament/Tournament.jsx';
+import TournamentPage from './pages/tournament/TournamentPage.jsx';
 
 const router = createBrowserRouter([
   {
@@ -19,7 +19,7 @@ const router = createBrowserRouter([
   },
   {
     path: "tournament/",
-    element: <Tournament />,
+    element: <TournamentPage />,
   },
 ]);
 

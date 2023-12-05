@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+import Block from "../../components/block/Block";
+
 function TournamentList() {
   const [tournaments, setTournaments] = useState([]);
 
@@ -20,14 +22,19 @@ function TournamentList() {
   }, []);
 
   return (
-    <div>
-      <h1>List of Tournaments</h1>
-      <ul>
-        {tournaments.map(tournament => (
-          <li key={tournament.id}>{tournament.name}</li>
-        ))}
-      </ul>
-    </div>
+		<div className="container-fluid">
+        	<div className="row">
+                <Block title="Tournament List">
+                    <div className="text-center">
+    					<ul>
+        					{tournaments.map(tournament => (
+          					<li key={tournament.id}>{tournament.name}</li>
+        					))}
+      					</ul>
+    				</div>
+				</Block>
+			</div>
+		</div>
   );
 }
 

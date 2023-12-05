@@ -1,5 +1,3 @@
-import { useState } from 'react'
-import viteLogo from '/vite.svg'
 import './App.css'
 import React, { useEffect } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';

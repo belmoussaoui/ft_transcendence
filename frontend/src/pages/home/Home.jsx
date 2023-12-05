@@ -31,6 +31,11 @@ function Home() {
                     </div>
                 </Block>
                 <Block title="Tournament">
+                    <div className="text-center">
+                        <Button>
+                            <Link to={'tournament/'}>Tournament</Link>
+                        </Button>
+                    </div>
                 </Block>
                 
             </div>

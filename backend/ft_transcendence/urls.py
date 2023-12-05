@@ -20,4 +20,5 @@ from django.urls import include, path
 urlpatterns = [
     path("deepthought/", include("deep_thought.urls")),
     path('admin/', admin.site.urls),
+	path('tournament/', include('tournament.urls')),
 ]

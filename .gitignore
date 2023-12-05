@@ -2,4 +2,5 @@
 .env
 .venv
 node_modules
+*.pyc
 

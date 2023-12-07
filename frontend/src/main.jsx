@@ -5,6 +5,7 @@ import Sidebar from './components/navbar/Sidebar.jsx';
 import Page from './pages/Page.jsx';
 import Home from './pages/home/Home.jsx';
 import Play from './pages/play/Play.jsx';
+import TournamentPage from './pages/tournament/TournamentPage.jsx';
 import "./main.css"
 import "bootstrap/dist/css/bootstrap.min.css"
 
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
   {
     path: "play/:playid",
     element: <Play />,
+  },
+  {
+    path: "tournament/",
+    element: <TournamentPage />,
   },
 ]);
 

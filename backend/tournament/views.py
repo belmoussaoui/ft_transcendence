@@ -3,6 +3,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
+from random import shuffle
 
 from .models import Tournament, TournamentMatch, Player
 
@@ -29,7 +30,7 @@ def create_tournament(request):
 def create_local_tournament(request):
 	tournament_name = request.data.get('name')
 	player_names = request.data.get('playerNames')
-	player_count = request.data.get('numberOfPlayers')
+	player_count = len(player_names)
 
 	if not tournament_name or not player_names or player_count < 2 or player_count > 8:
 		return Response({'message': 'Invalid tournament data.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -37,17 +38,17 @@ def create_local_tournament(request):
     # Création du tournoi
 	tournament = Tournament.objects.create(name=tournament_name)
 
+	# Mélanger les joueurs
+	shuffle(player_names)
+
     # Ajout des joueurs au tournoi
 	for player_name in player_names:
 		player = Player.objects.create(name=player_name)
 		tournament.players.add(player)
-        
-	# Mélanger les joueurs
-	tournament.players.shuffle()
 
     # Prévoir les matchs (création des paires de joueurs)
-	for i in range(tournament.players.count()):
-		for j in range(i + 1, tournament.players.count()):
-			TournamentMatch.objects.create(tournament=tournament, player1=tournament.players[i], player2=tournament.players[j])
+	#for i in range(tournament.players.count()):
+	#	for j in range(i + 1, tournament.players.count()):
+	#	TournamentMatch.objects.create(tournament=tournament, player1=tournament.players[i], player2=tournament.players[j])
 
 	return Response({'message': 'Tournament created successfully.'}, status=status.HTTP_201_CREATED)

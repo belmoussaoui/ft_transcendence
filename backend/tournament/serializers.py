@@ -12,6 +12,8 @@ class TournamentMatchSerializer(serializers.ModelSerializer):
         fields = ('id', 'tournament', 'player1', 'player2', 'winner')
 
 class TournamentSerializer(serializers.ModelSerializer):
+    players = PlayerSerializer(many=True, read_only=True)
+    
     class Meta:
         model = Tournament
         fields = ('id', 'name', 'players', 'online')

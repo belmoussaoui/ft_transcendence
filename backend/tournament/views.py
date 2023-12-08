@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from random import shuffle
 
-from .models import Tournament, TournamentMatch, Player
+from .models import Tournament, Player
 
 from .serializers import TournamentSerializer
 
@@ -46,9 +46,13 @@ def create_local_tournament(request):
 		player = Player.objects.create(name=player_name)
 		tournament.players.add(player)
 
-    # Prévoir les matchs (création des paires de joueurs)
-	#for i in range(tournament.players.count()):
-	#	for j in range(i + 1, tournament.players.count()):
-	#	TournamentMatch.objects.create(tournament=tournament, player1=tournament.players[i], player2=tournament.players[j])
-
 	return Response({'message': 'Tournament created successfully.'}, status=status.HTTP_201_CREATED)
+
+@api_view(['GET'])
+def get_tournament_details(request, tournamentid):
+    try:
+        tournament = Tournament.objects.get(id=tournamentid)
+        serializer = TournamentSerializer(tournament)
+        return Response(serializer.data)
+    except Tournament.DoesNotExist:
+        return Response({"message": "Tournament not found"}, status=404)

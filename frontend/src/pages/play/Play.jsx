@@ -9,7 +9,6 @@ function Play() {
         gameSocket.onopen = () => {
             console.log("WebSocket Client Connected");
         };
-        console.log(gameSocket);
         gameSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
             console.log(data);

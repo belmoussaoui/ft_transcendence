@@ -32,15 +32,16 @@ ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     'corsheaders',
+	'tournament',
+    'pong_game',
+    'channels',
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	'tournament',
-    'pong_game',
-    'channels'
 ]
 
 MIDDLEWARE = [
@@ -140,6 +141,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
 
 CORS_ORIGIN_ALLOW_ALL = True
 

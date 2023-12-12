@@ -5,7 +5,6 @@ from channels.generic.websocket import WebsocketConsumer
 
 class GameConsumer(WebsocketConsumer):
     def connect(self):
-        print("ok")
         self.accept()
         self.send(text_data=json.dumps({"message": "hello world"}))
 

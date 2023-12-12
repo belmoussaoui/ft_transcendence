@@ -12,7 +12,7 @@ function Home() {
         return fetch(url)
           .then((res) => res.json())
           .then((d) => setData(d.answer))
-      }
+    }
     
     return (
         <div className="container-fluid">

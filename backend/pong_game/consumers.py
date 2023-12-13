@@ -28,6 +28,8 @@ class GameConsumer(AsyncWebsocketConsumer):
             self.paddle2.y += 0.1
         if event2 == 'down':
             self.paddle2.y -= 0.1
+        self.paddle1.y = max(-2.5, min(self.paddle1.y, 2.5))
+        self.paddle2.y = max(-2.5, min(self.paddle2.y, 2.5))
 
 
     async def game_loop(self):

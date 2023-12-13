@@ -27,7 +27,7 @@ const Paddle = forwardRef(function Paddle(props, ref) {
             ref={ref}
             {...props}
         >
-            <boxGeometry args={[0.5, 2, 0.5]} />
+            <boxGeometry args={[0.25, 1, 0.25]} />
             <meshStandardMaterial color={'black'} />
         </mesh>
     )
@@ -43,9 +43,7 @@ function Logic() {
             console.log("WebSocket Client Connected");
         };
         gameSocket.onmessage = function(e) {
-            console.log("test");
             let objet = JSON.parse(e.data);
-            // console.log(objet);
             meshRef1.current.position.y = objet.pos1;
             meshRef2.current.position.y = objet.pos2;
         };
@@ -56,9 +54,7 @@ function Logic() {
     const meshRef2 = useRef()
 
     useFrame((state, delta) => {
-        if (keyMap['KeyW']) {
-            gameSocket.send(JSON.stringify({"p1": "up"}))
-        }
+        keyMap['KeyW'] && (gameSocket.send(JSON.stringify({"p1": "up"})))
         keyMap['KeyS'] && (gameSocket.send(JSON.stringify({"p1": "down"})))
         keyMap['ArrowUp'] && (gameSocket.send(JSON.stringify({"p2": "up"})))
         keyMap['ArrowDown'] && (gameSocket.send(JSON.stringify({"p2": "down"})))
@@ -68,20 +64,20 @@ function Logic() {
     return <>
         <ambientLight intensity={10} />
         <pointLight position={[0, 1, -2]} />
-        <Paddle ref={meshRef1} position={[-8, 0, 0]} />
-        <Paddle ref={meshRef2} position={[8, 0, 0]} />
+        <Paddle ref={meshRef1} position={[-3, 0, 0]} />
+        <Paddle ref={meshRef2} position={[3, 0, 0]} />
     </>
 }
 
 function Play() {
-    
     return (
-        <div className="container-fluid">
-            <div className="row">
+        <div className="d-flex justify-content-center  align-items-center h-100">
+            <div>
             <Canvas orthographic camera={{ zoom: 100, position: [0, 0, 100]}}>
+                <color attach="background" args={["white"]} />
                 <Logic></Logic>
             </Canvas>
-             </div>
+            </div>
         </div>
     )
 }

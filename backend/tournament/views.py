@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from random import shuffle
 
-from .models import Tournament, Player
+from .models import Tournament, Player, TournamentMatch
 
 from .serializers import TournamentSerializer
 
@@ -45,6 +45,14 @@ def create_local_tournament(request):
 	for player_name in player_names:
 		player = Player.objects.create(name=player_name)
 		tournament.players.add(player)
+	
+	# Création des matchs
+	for i in range(0, player_count - 1, 2):
+		match = TournamentMatch.objects.create(player1=tournament.players.all()[i], player2=tournament.players.all()[i+1])
+		tournament.matchs.add(match)
+	if player_count % 2 == 1:
+		match = TournamentMatch.objects.create(player1=tournament.players.all()[player_count-1], winner=tournament.players.all()[player_count-1])
+		tournament.matchs.add(match)
 
 	return Response({'message': 'Tournament created successfully.'}, status=status.HTTP_201_CREATED)
 

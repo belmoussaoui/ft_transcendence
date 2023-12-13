@@ -7,13 +7,18 @@ class PlayerSerializer(serializers.ModelSerializer):
         fields = ('id', 'name')
 
 class TournamentMatchSerializer(serializers.ModelSerializer):
+    player1 = PlayerSerializer(read_only=True)
+    player2 = PlayerSerializer(read_only=True)
+    winner = PlayerSerializer(read_only=True)
+
     class Meta:
         model = TournamentMatch
-        fields = ('id', 'tournament', 'player1', 'player2', 'winner')
+        fields = ('id', 'player1', 'player2', 'winner')
 
 class TournamentSerializer(serializers.ModelSerializer):
     players = PlayerSerializer(many=True, read_only=True)
+    matchs = TournamentMatchSerializer(many=True, read_only=True)
     
     class Meta:
         model = Tournament
-        fields = ('id', 'name', 'players', 'online')
+        fields = ('id', 'name', 'players', 'matchs', 'online')

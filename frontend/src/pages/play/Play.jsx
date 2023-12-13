@@ -35,27 +35,6 @@ const Paddle = forwardRef(function Paddle(props, ref) {
   )
 
 function Logic() {
-    const meshRef1 = useRef()
-    const meshRef2 = useRef()
-
-    useFrame((state, delta) => {
-        console.log(meshRef1);
-        keyMap['KeyW'] && (meshRef1.current.position.y += 3 * delta)
-        keyMap['KeyS'] && (meshRef1.current.position.y -= 3 * delta)
-        keyMap['ArrowUp'] && (meshRef2.current.position.y += 3 * delta)
-        keyMap['ArrowDown'] && (meshRef2.current.position.y -= 3 * delta)
-    })
-    const keyMap = useKeyboard()
-
-    return <>
-        <ambientLight intensity={10} />
-        <pointLight position={[0, 1, -2]} />
-        <Paddle ref={meshRef1} position={[-5, 0, 0]} />
-        <Paddle ref={meshRef2} position={[5, 0, 0]} />
-    </>
-}
-
-function Play() {
     const gameSocket = new WebSocket('ws://localhost:8080/ws/game/');
 
     
@@ -64,10 +43,38 @@ function Play() {
             console.log("WebSocket Client Connected");
         };
         gameSocket.onmessage = function(e) {
-            const data = JSON.parse(e.data);
-            console.log(data);
+            console.log("test");
+            let objet = JSON.parse(e.data);
+            // console.log(objet);
+            meshRef1.current.position.y = objet.pos1;
+            meshRef2.current.position.y = objet.pos2;
         };
-    }, []);    
+    }, []);
+
+
+    const meshRef1 = useRef()
+    const meshRef2 = useRef()
+
+    useFrame((state, delta) => {
+        if (keyMap['KeyW']) {
+            gameSocket.send(JSON.stringify({"p1": "up"}))
+        }
+        keyMap['KeyS'] && (gameSocket.send(JSON.stringify({"p1": "down"})))
+        keyMap['ArrowUp'] && (gameSocket.send(JSON.stringify({"p2": "up"})))
+        keyMap['ArrowDown'] && (gameSocket.send(JSON.stringify({"p2": "down"})))
+    })
+    const keyMap = useKeyboard()
+
+    return <>
+        <ambientLight intensity={10} />
+        <pointLight position={[0, 1, -2]} />
+        <Paddle ref={meshRef1} position={[-8, 0, 0]} />
+        <Paddle ref={meshRef2} position={[8, 0, 0]} />
+    </>
+}
+
+function Play() {
+    
     return (
         <div className="container-fluid">
             <div className="row">

@@ -26,7 +26,7 @@ function Home() {
                 <Block title="Play Match">
                     <div className="text-center">
                         <Button>
-                            <Link to={'play/1'}>Jouer</Link>
+                            <Link to={'play'}>Jouer</Link>
                         </Button>
                     </div>
                 </Block>

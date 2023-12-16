@@ -8,14 +8,14 @@ class Ball:
         self.y = 0
         self.speed = 0.05
         self.direction_x = 1
-        self.direction_y = 1
+        self.direction_y = 0
         self.wait = 0
     
     def update(self):
         if (self.wait < 60):
             self.wait += 1
             return
-        self.speed = min(self.speed, 0.2)
+        self.speed = min(self.speed, 0.15)
         self.update_x()
         self.update_y()
     
@@ -26,21 +26,22 @@ class Ball:
             self.x -= self.speed
 
     def update_y(self):    
-        if self.direction_y == 1:
-            self.y += self.speed
-        else:
-            self.y -= self.speed
+        self.y += self.speed * self.direction_y
         if self.y > 2.9:
-            self.direction_y = -1
+            self.direction_y *= -1
         if self.y < -2.8:
+            self.direction_y *= -1
+        if self.direction_y > 1:
             self.direction_y = 1
+        if self.direction_y < -1:
+            self.direction_y = -1
     
     def clear(self):
         self.x = 0
         self.y = 0
         self.speed = 0.05
         self.direction_x = 1
-        self.direction_y = 1
+        self.direction_y = 0
         self.wait = 0
 
 class Game:
@@ -58,14 +59,16 @@ class Game:
             self.score[1] += 1
             self.ball.clear()
         self.ball.update()
-        if self.ball.x < -2.8 and self.ball.x > -3.3:
-            if self.ball.y > self.paddle1.y - 0.7 and self.ball.y < self.paddle1.y + 0.7:
+        if self.ball.x < -2.8 and self.ball.x > -3:
+            if self.ball.y > self.paddle1.y - 0.5 and self.ball.y < self.paddle1.y + 0.5:
                 if self.ball.direction_x == -1:
                     self.ball.direction_x = 1
                     self.ball.speed += 0.01
-        if self.ball.x > 2.8 and self.ball.x < 3.3:
-            if self.ball.y > self.paddle2.y - 0.7 and self.ball.y < self.paddle2.y + 0.7:
+                    self.ball.direction_y = (self.ball.y - self.paddle1.y) * 2
+        if self.ball.x > 2.8 and self.ball.x < 3:
+            if self.ball.y > self.paddle2.y - 0.5 and self.ball.y < self.paddle2.y + 0.5:
                 if self.ball.direction_x == 1:
                     self.ball.direction_x = -1
                     self.ball.speed += 0.01
+                    self.ball.direction_y = (self.ball.y - self.paddle2.y) * 2
         

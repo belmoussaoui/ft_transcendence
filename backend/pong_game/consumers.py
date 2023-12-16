@@ -37,6 +37,7 @@ class GameConsumer(AsyncWebsocketConsumer):
             state = {
                 'pos1' : self.game.paddle1.y,
                 'pos2' : self.game.paddle2.y,
+                'score' : self.game.score,
                 'ball': {
                     'x': self.game.ball.x,
                     'y': self.game.ball.y
@@ -44,3 +45,5 @@ class GameConsumer(AsyncWebsocketConsumer):
             }
             await self.send(text_data=json.dumps(state))
             await asyncio.sleep(1/60)
+            if self.game.score[0] == 3 or self.game.score[1] == 3:
+                await self.close()

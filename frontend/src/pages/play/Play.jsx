@@ -21,6 +21,20 @@ function useKeyboard() {
     return keyMap.current
   }
 
+
+const Ball = forwardRef(function Ball(props, ref) {
+    return (
+        <mesh
+            ref={ref}
+            {...props}
+        >
+            <boxGeometry args={[0.25, 0.25, 0.25]} />
+            <meshStandardMaterial color={'black'} />
+        </mesh>
+    )
+})
+
+
 const Paddle = forwardRef(function Paddle(props, ref) {
     return (
         <mesh
@@ -31,8 +45,7 @@ const Paddle = forwardRef(function Paddle(props, ref) {
             <meshStandardMaterial color={'black'} />
         </mesh>
     )
-  }
-  )
+})
 
 function Logic() {
     const gameSocket = new WebSocket('ws://localhost:8080/ws/game/');
@@ -46,12 +59,16 @@ function Logic() {
             let objet = JSON.parse(e.data);
             meshRef1.current.position.y = objet.pos1;
             meshRef2.current.position.y = objet.pos2;
+            ballRef.current.position.x = objet.ball.x;
+            ballRef.current.position.y = objet.ball.y;
+            //console.log(objet.ball);
         };
     }, []);
 
 
     const meshRef1 = useRef()
     const meshRef2 = useRef()
+    const ballRef = useRef()
 
     useFrame((state, delta) => {
         keyMap['KeyW'] && (gameSocket.send(JSON.stringify({"p1": "up"})))
@@ -66,6 +83,7 @@ function Logic() {
         <pointLight position={[0, 1, -2]} />
         <Paddle ref={meshRef1} position={[-3, 0, 0]} />
         <Paddle ref={meshRef2} position={[3, 0, 0]} />
+        <Ball ref={ballRef} position={[0, 0, 0]} />
     </>
 }
 

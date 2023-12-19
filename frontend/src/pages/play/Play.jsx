@@ -29,7 +29,7 @@ const Ball = forwardRef(function Ball(props, ref) {
             ref={ref}
             {...props}
         >
-            <boxGeometry args={[0.25, 0.25, 0.25]} />
+            <boxGeometry args={[1, 1, 1]} />
             <meshStandardMaterial color={'white'} />
         </mesh>
     )
@@ -42,11 +42,19 @@ const Paddle = forwardRef(function Paddle(props, ref) {
             ref={ref}
             {...props}
         >
-            <boxGeometry args={[0.25, 0.8, 0.25]} />
+            <boxGeometry args={[1, 1, 3]} />
             <meshStandardMaterial color={'white'} />
         </mesh>
     )
 })
+
+function Screen() {
+
+    return <mesh position-y={-0.1}>
+        <boxGeometry args={[25, 0.1, 21]} />
+        <meshStandardMaterial color={'black'} />
+    </mesh>
+}
 
 function Logic() {
     const gameSocket = new WebSocket('ws://localhost:8080/ws/game/');
@@ -57,18 +65,9 @@ function Logic() {
             console.log("WebSocket Client Connected");
         };
         gameSocket.onmessage = function(e) {
-            let objet = JSON.parse(e.data);
-            meshRef1.current.position.y = objet.pos1;
-            meshRef2.current.position.y = objet.pos2;
-            ballRef.current.position.x = objet.ball.x;
-            ballRef.current.position.y = objet.ball.y;
-            scoreRef.current.text = `${objet.score[0]} - ${objet.score[1]}`;
-            if (objet.score[0] == 3 || objet.score[1] == 3)
-                setTimeout(() =>
-                    alert("a player won the match!"),
-                    500
-                )
-        };
+        }
+      
+        
     }, []);
 
 
@@ -86,14 +85,16 @@ function Logic() {
     const keyMap = useKeyboard()
 
     return <>
-        <ambientLight intensity={10} />
-        <pointLight position={[0, 1, -2]} />
+        <Screen/>
+        <ambientLight color={"#FFFFFF"} intensity={2} />
+        <directionalLight color={"#E1D1F0"} castShadow position={ [ 0, 2.8, 3 ] } intensity={ 0.8 } />
+        <ambientLight intensity={ 0.5 } />
         <Text ref={scoreRef} position={[0, 2.3, 0]} color="#ffffff" fontSize={1}>
             0 - 0
         </Text>
-        <Paddle ref={meshRef1} position={[-3, 0, 0]} />
-        <Paddle ref={meshRef2} position={[3, 0, 0]} />
-        <Ball ref={ballRef} position={[0, 0, 0]} />
+        <Paddle ref={meshRef1} position={[-11.5, 0, 0]} />
+        <Paddle ref={meshRef2} position={[11.5, 0, 0]} />
+        <Ball ref={ballRef} position={[3, 0, 0]} />
     </>
 }
 
@@ -101,8 +102,8 @@ function Play() {
     return (
         <div className="d-flex justify-content-center  align-items-center h-100">
             <div>
-            <Canvas linear flat orthographic camera={{ zoom: 100, position: [0, 0, 100]}}>
-                <color attach="background" args={["black"]} />
+            <Canvas linear flat camera={{ position: [0, 15, 0], fov: 75 }}>
+                <color attach="background" args={["white"]} />
                 <Logic></Logic>
             </Canvas>
             </div>

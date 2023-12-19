@@ -52,7 +52,7 @@ function Screen() {
 
     return <mesh position-y={-0.1}>
         <boxGeometry args={[25, 0.1, 21]} />
-        <meshStandardMaterial color={'black'} />
+        <meshStandardMaterial color={'#484646'} />
     </mesh>
 }
 
@@ -65,20 +65,13 @@ function Logic() {
             console.log("WebSocket Client Connected");
         };
         gameSocket.onmessage = function(e) {
-            gameSocket.onmessage = function(e) {
-                let objet = JSON.parse(e.data);
-                meshRef1.current.position.z = -objet.pos1;
-                meshRef2.current.position.z = -objet.pos2;
-                ballRef.current.position.x = objet.ball.x;
-                ballRef.current.position.z = -objet.ball.y;
-                scoreRef.current.text = `${objet.score[0]} - ${objet.score[1]}`;
-                if (objet.score[0] == 3 || objet.score[1] == 3)
-                    setTimeout(() =>
-                        alert("a player won the match!"),
-                        500
-                    )
-            };
-        }
+            let objet = JSON.parse(e.data);
+            meshRef1.current.position.z = -objet.paddles.player1;
+            meshRef2.current.position.z = -objet.paddles.player2;
+            ballRef.current.position.x = objet.ball.x;
+            ballRef.current.position.z = -objet.ball.y;
+            scoreRef.current.text = `${objet.score.player1} - ${objet.score.player2}`;
+        };
       
         
     }, []);
@@ -90,19 +83,36 @@ function Logic() {
     const scoreRef = useRef()
 
     useFrame((state, delta) => {
-        keyMap['KeyW'] && (gameSocket.send(JSON.stringify({"p1": "up"})))
-        keyMap['KeyS'] && (gameSocket.send(JSON.stringify({"p1": "down"})))
-        keyMap['ArrowUp'] && (gameSocket.send(JSON.stringify({"p2": "up"})))
-        keyMap['ArrowDown'] && (gameSocket.send(JSON.stringify({"p2": "down"})))
+        keyMap['KeyW'] && (gameSocket.send(JSON.stringify({
+            event: 'MOVE',
+            direction : 1,
+            playerId: 1,
+        })))
+        keyMap['KeyS'] && (gameSocket.send(JSON.stringify({
+            event: 'MOVE',
+            direction : -1,
+            playerId: 1,
+        })))
+        keyMap['ArrowUp'] && (gameSocket.send(JSON.stringify({
+            event: 'MOVE',
+            direction : 1,
+            playerId: 2,
+        })))
+        keyMap['ArrowDown'] && (gameSocket.send(JSON.stringify({
+            event: 'MOVE',
+            direction : -1,
+            playerId: 2,
+        })))
     })
     const keyMap = useKeyboard()
 
     return <>
         <Screen/>
         <ambientLight color={"#FFFFFF"} intensity={2} />
-        <directionalLight color={"#E1D1F0"} castShadow position={ [ 0, 2.8, 3 ] } intensity={ 0.8 } />
-        <ambientLight intensity={ 0.5 } />
-        <Text ref={scoreRef} position={[0, 2.3, 0]} color="#ffffff" fontSize={1}>
+        <directionalLight color={"#FFFFFF"} castShadow position={ [ 0, 10, 10 ] } intensity={ 1.5 } />
+        <directionalLight color={"#FFFFFF"} castShadow position={ [ 1, 1, 1 ] } intensity={ 1.5 } />
+        <directionalLight color={"#FFFFFF"} castShadow position={ [ -1, 1, 1 ] } intensity={ 1.5 } />
+        <Text rotation-x={-Math.PI / 2} ref={scoreRef} position={[0, 0, -8]} color="#ffffff" fontSize={4}>
             0 - 0
         </Text>
         <Paddle ref={meshRef1} position={[-11.5, 0, 0]} />
@@ -116,7 +126,7 @@ function Play() {
         <div className="d-flex justify-content-center  align-items-center h-100">
             <div>
             <Canvas linear flat camera={{ position: [0, 15, 0], fov: 75 }}>
-                <color attach="background" args={["white"]} />
+                <color attach="background" args={["black"]} />
                 <Logic></Logic>
             </Canvas>
             </div>

@@ -65,6 +65,19 @@ function Logic() {
             console.log("WebSocket Client Connected");
         };
         gameSocket.onmessage = function(e) {
+            gameSocket.onmessage = function(e) {
+                let objet = JSON.parse(e.data);
+                meshRef1.current.position.z = -objet.pos1;
+                meshRef2.current.position.z = -objet.pos2;
+                ballRef.current.position.x = objet.ball.x;
+                ballRef.current.position.z = -objet.ball.y;
+                scoreRef.current.text = `${objet.score[0]} - ${objet.score[1]}`;
+                if (objet.score[0] == 3 || objet.score[1] == 3)
+                    setTimeout(() =>
+                        alert("a player won the match!"),
+                        500
+                    )
+            };
         }
       
         

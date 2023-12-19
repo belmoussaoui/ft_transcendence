@@ -20,15 +20,15 @@ class GameConsumer(AsyncWebsocketConsumer):
         event1 = response.get("p1", None)
         event2 = response.get("p2", None)
         if event1 == 'up':
-            self.game.paddle1.y += 0.1
+            self.game.paddle1.y += 0.3
         if event1 == 'down':
-            self.game.paddle1.y -= 0.1
+            self.game.paddle1.y -= 0.3
         if event2 == 'up':
-            self.game.paddle2.y += 0.1
+            self.game.paddle2.y += 0.3
         if event2 == 'down':
-            self.game.paddle2.y -= 0.1
-        self.game.paddle1.y = max(-2.5, min(self.game.paddle1.y, 2.5))
-        self.game.paddle2.y = max(-2.5, min(self.game.paddle2.y, 2.5))
+            self.game.paddle2.y -= 0.3
+        self.game.paddle1.y = max(-10.5, min(self.game.paddle1.y, 10.5))
+        self.game.paddle2.y = max(-10.5, min(self.game.paddle2.y, 10.5))
 
 
     async def game_loop(self):

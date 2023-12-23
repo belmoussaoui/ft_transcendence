@@ -3,6 +3,7 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import "./Play.css"
 import { forwardRef } from 'react';
 import { Text } from '@react-three/drei';
+import { useLocation } from "react-router-dom";
 
 
 function useKeyboard() {
@@ -122,6 +123,8 @@ function Logic() {
 }
 
 function Play() {
+    const config = useLocation();
+    console.log(config);
     return (
         <div className="d-flex justify-content-center  align-items-center h-100">
             <div>

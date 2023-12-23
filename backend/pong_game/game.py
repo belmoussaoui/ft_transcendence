@@ -100,9 +100,9 @@ class Game:
     
     def check_scoring(self):
         if self.ball.x > self.width / 2 + 0.5:
-            self.score_point(self, 0)
+            self.score_point(0)
         if self.ball.x < -self.width / 2 - 0.5:
-             self.score_point(self, 1)
+             self.score_point(1)
     
     def score_point(self, player_id):
         self.score[player_id] += 1
@@ -114,14 +114,14 @@ class Game:
 
     def check_collides_with_paddles(self):
         if self.ball.x >= self.paddles[1].x - 1 and self.ball.x <= self.paddles[1].x + 1:
-            if self.ball.y <= self.paddles[1].y + 2 and \
-                self.ball.y >= self.paddles[1].y - 2:
-                self.ball.collide_with_paddle(self.paddles[1])
+            if self.ball.y <= self.paddles[1].y + 2 and self.ball.y >= self.paddles[1].y - 2:
+                if self.ball.direction_x == 1:
+                    self.ball.collide_with_paddle(self.paddles[1])
         
         if self.ball.x <= self.paddles[0].x + 1 and self.ball.x >= self.paddles[0].x - 1:
-            if self.ball.y <= self.paddles[0].y + 2 and \
-                self.ball.y >= self.paddles[0].y - 2:
-                self.ball.collide_with_paddle(self.paddles[0])
+            if self.ball.y <= self.paddles[0].y + 2 and self.ball.y >= self.paddles[0].y - 2:
+                if self.ball.direction_x == -1:
+                    self.ball.collide_with_paddle(self.paddles[0])
 
     def check_collides_with_walls(self):
         if self.ball.y > self.height / 2:

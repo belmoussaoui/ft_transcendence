@@ -25,3 +25,7 @@ class GameConsumer(AsyncWebsocketConsumer):
             data = self.manager.game_data()
             await self.send(text_data=json.dumps(data))
             await asyncio.sleep(1/60)
+            if data["state"] == "gameover":
+                break
+        await self.close()
+        

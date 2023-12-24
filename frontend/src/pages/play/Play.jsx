@@ -52,19 +52,27 @@ const Paddle = forwardRef(function Paddle(props, ref) {
 function Screen() {
 
     return <mesh position-y={-0.1}>
-        <boxGeometry args={[25, 0.1, 21]} />
+        <boxGeometry args={[30, 0.1, 21]} />
         <meshStandardMaterial color={'#484646'} />
     </mesh>
 }
 
 function Logic() {
     const gameSocket = new WebSocket('ws://localhost:8080/ws/game/');
+    const { state } = useLocation();
 
     
     useEffect(() => {
         gameSocket.onopen = () => {
-            console.log("WebSocket Client Connected");
+            console.log(state);
+            gameSocket.send(JSON.stringify({
+                event: 'CONFIG',
+                speed : state.speed,
+                points: state.points,
+            }))
         };
+
+
         gameSocket.onmessage = function(e) {
             let objet = JSON.parse(e.data);
             meshRef1.current.position.z = -objet.paddles.player1;
@@ -73,11 +81,7 @@ function Logic() {
             ballRef.current.position.z = -objet.ball.y;
             scoreRef.current.text = `${objet.score.player1} - ${objet.score.player2}`;
         };
-      
-        
     }, []);
-
-
     const meshRef1 = useRef()
     const meshRef2 = useRef()
     const ballRef = useRef()
@@ -116,15 +120,13 @@ function Logic() {
         <Text rotation-x={-Math.PI / 2} ref={scoreRef} position={[0, 0, -8]} color="#ffffff" fontSize={4}>
             0 - 0
         </Text>
-        <Paddle ref={meshRef1} position={[-11.5, 0, 0]} />
-        <Paddle ref={meshRef2} position={[11.5, 0, 0]} />
+        <Paddle ref={meshRef1} position={[-14, 0, 0]} />
+        <Paddle ref={meshRef2} position={[14, 0, 0]} />
         <Ball ref={ballRef} position={[3, 0, 0]} />
     </>
 }
 
 function Play() {
-    const config = useLocation();
-    console.log(config);
     return (
         <div className="d-flex justify-content-center  align-items-center h-100">
             <div>

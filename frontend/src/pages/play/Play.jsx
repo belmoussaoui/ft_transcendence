@@ -2,8 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import { Canvas, useFrame } from '@react-three/fiber'
 import "./Play.css"
 import { forwardRef } from 'react';
-import { Text } from '@react-three/drei';
-import { useLocation } from "react-router-dom";
+import { Stage, Text } from '@react-three/drei';
+import { useLocation, useNavigate } from "react-router-dom";
 
 
 function useKeyboard() {
@@ -27,6 +27,7 @@ function useKeyboard() {
 const Ball = forwardRef(function Ball(props, ref) {
     return (
         <mesh
+            castShadow
             ref={ref}
             {...props}
         >
@@ -40,6 +41,7 @@ const Ball = forwardRef(function Ball(props, ref) {
 const Paddle = forwardRef(function Paddle(props, ref) {
     return (
         <mesh
+            castShadow
             ref={ref}
             {...props}
         >
@@ -51,15 +53,19 @@ const Paddle = forwardRef(function Paddle(props, ref) {
 
 function Screen() {
 
-    return <mesh position-y={-0.1}>
-        <boxGeometry args={[30, 0.1, 21]} />
-        <meshStandardMaterial color={'#484646'} />
-    </mesh>
+    return <>
+        <mesh position-y={-0.6} receiveShadow>
+            <boxGeometry args={[30, 0.01, 22]} />
+            <meshStandardMaterial color={'#413b3b'} />
+        </mesh>
+    </>
+    
 }
 
 function Logic() {
     const gameSocket = new WebSocket('ws://localhost:8080/ws/game/');
     const { state } = useLocation();
+    const navigate = useNavigate();
 
     
     useEffect(() => {
@@ -75,6 +81,10 @@ function Logic() {
 
         gameSocket.onmessage = function(e) {
             let objet = JSON.parse(e.data);
+            if (objet.state == "terminate")
+            setTimeout(() => {
+                navigate("/");
+            }, 1000);
             meshRef1.current.position.z = -objet.paddles.player1;
             meshRef2.current.position.z = -objet.paddles.player2;
             ballRef.current.position.x = objet.ball.x;
@@ -108,15 +118,18 @@ function Logic() {
             direction : -1,
             playerId: 2,
         })))
+        keyMap['Space'] && (gameSocket.send(JSON.stringify({
+            event: 'START',
+        })))
     })
     const keyMap = useKeyboard()
 
     return <>
         <Screen/>
-        <ambientLight color={"#FFFFFF"} intensity={2} />
-        <directionalLight color={"#FFFFFF"} castShadow position={ [ 0, 10, 10 ] } intensity={ 1.5 } />
-        <directionalLight color={"#FFFFFF"} castShadow position={ [ 1, 1, 1 ] } intensity={ 1.5 } />
-        <directionalLight color={"#FFFFFF"} castShadow position={ [ -1, 1, 1 ] } intensity={ 1.5 } />
+        <directionalLight shadow-camera-left={-50} shadow-camera-right={30} shadow-camera-top={30} shadow-camera-bottom={-30} color={"#FFFFFF"} castShadow position={ [ 20, 5, 15 ] } intensity={ 2 } />
+        <directionalLight shadow-camera-left={-50} shadow-camera-right={30} shadow-camera-top={30} shadow-camera-bottom={-30} color={"#FFFFFF"} castShadow position={ [ -10, 20, 15 ] } intensity={ 1 } />
+
+        
         <Text rotation-x={-Math.PI / 2} ref={scoreRef} position={[0, 0, -8]} color="#ffffff" fontSize={4}>
             0 - 0
         </Text>
@@ -130,9 +143,10 @@ function Play() {
     return (
         <div className="d-flex justify-content-center  align-items-center h-100">
             <div>
-            <Canvas linear flat camera={{ position: [0, 15, 0], fov: 75 }}>
-                <color attach="background" args={["black"]} />
+            <Canvas shadows linear flat camera={{ position: [0, 35, 0], fov: 40 }}>
+                <Stage shadows={false} adjustCamera={false}>
                 <Logic></Logic>
+                </Stage>
             </Canvas>
             </div>
         </div>

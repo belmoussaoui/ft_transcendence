@@ -6,6 +6,7 @@ import Page from './pages/Page.jsx';
 import Home from './pages/home/Home.jsx';
 import Play from './pages/play/Play.jsx';
 import TournamentPage from './pages/tournament/TournamentPage.jsx';
+import Livechat from './pages/livechat/LiveChat.jsx'
 import "./main.css"
 import "bootstrap/dist/css/bootstrap.min.css"
 
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
   {
     path: "tournament/",
     element: <TournamentPage />,
+  },
+  {
+    path: "livechat/",
+    element: <Livechat />,
   },
 ]);
 

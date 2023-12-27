@@ -61,6 +61,14 @@ function Home() {
                         </Button>
                     </div>
                 </Block>
+
+                <Block title="Live Chat">
+                    <div className="text-center">
+                        <Button>
+                            <Link to={'livechat/'}>Live Chat</Link>
+                        </Button>
+                    </div>
+                </Block>
                 
             </div>
         </div>

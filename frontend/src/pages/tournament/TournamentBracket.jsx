@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 function TournamentBracket() {
   const { tournamentid } = useParams();
   const [tournament, setTournament] = useState(null);
+  const [nextPlayableMatch, setNextPlayableMatch] = useState(null);
 
   useEffect(() => {
     fetch(`http://localhost:8080/tournament/${tournamentid}`)
@@ -16,6 +17,8 @@ function TournamentBracket() {
       })
       .then(data => {
         setTournament(data);
+        const nextMatch = data.matchs.find(match => !match.winner);
+        setNextPlayableMatch(nextMatch);
       })
       .catch(error => {
         console.error('Error fetching tournament details:', error);
@@ -46,12 +49,10 @@ function TournamentBracket() {
         <div key={match.id} className="d-flex align-items-center mb-3">
           <div className="border rounded p-3 mr-3" style={player1Style}>
             <p>{player1.name}</p>
-            {winner && loser && <p className={winner.id === match.player1.id ? '' : 'text-secondary'}>{loser.name}</p>}
           </div>
           {player2 && (
             <div className="border rounded p-3" style={player2Style}>
               <p>{player2.name}</p>
-              {winner && loser && <p className={winner.id === match.player2.id ? '' : 'text-secondary'}>{loser.name}</p>}
             </div>
           )}
         </div>
@@ -71,6 +72,28 @@ function TournamentBracket() {
     );
   };
 
+  const handleNextMatch = () => {
+    fetch(`http://localhost:8080/tournament/${tournamentid}/play-next-match`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ nextMatchId: nextPlayableMatch.id }),
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        window.location.reload();
+      })
+      .catch(error => {
+        console.error('Error while processing the next match:', error);
+      });
+  };
+
   if (!tournament) {
     return <div>Invalid tournament</div>;
   }
@@ -82,6 +105,12 @@ function TournamentBracket() {
       <div className="row">
         <div className="col">
           {renderMatches()}
+          {nextPlayableMatch && (
+            <button
+              onClick={handleNextMatch}>
+              Lancer le prochain match
+            </button>
+          )}
         </div>
       </div>
     </div>

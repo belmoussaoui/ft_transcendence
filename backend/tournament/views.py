@@ -64,3 +64,16 @@ def get_tournament_details(request, tournamentid):
         return Response(serializer.data)
     except Tournament.DoesNotExist:
         return Response({"message": "Tournament not found"}, status=404)
+	
+@api_view(['POST'])
+def play_next_match(request, tournament_id):
+    next_match_id = request.data.get('nextMatchId')
+    if not next_match_id:
+        return Response({'message': 'Invalid request'}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        match = TournamentMatch.objects.get(id=next_match_id)
+        match.winner = match.player1
+        match.save()
+        return Response({'message': 'Next match played successfully'}, status=status.HTTP_200_OK)
+    except (Tournament.DoesNotExist, TournamentMatch.DoesNotExist):
+        return Response({'message': 'Tournament or match not found'}, status=status.HTTP_404_NOT_FOUND)
